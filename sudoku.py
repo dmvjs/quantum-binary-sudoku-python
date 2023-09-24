@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from qiskit import IBMQ, Aer, QuantumCircuit, ClassicalRegister, QuantumRegister, execute
+from qiskit import Aer, QuantumCircuit, ClassicalRegister, QuantumRegister, execute
+from qiskit_ionq import IonQProvider
+provider = IonQProvider()
 
 from qiskit.visualization import plot_histogram
 
@@ -55,15 +57,13 @@ sudoku_oracle(qc, clause_list, var_qubits, clause_qubits, cbits)
 qc.barrier()
 qc.append(diffuser(4), [0,1,2,3])
 
-sudoku_oracle(qc, clause_list, var_qubits, clause_qubits, cbits)
-qc.barrier()
-qc.append(diffuser(4), [0,1,2,3])
+
 
 qc.measure(var_qubits, cbits)
 qc.draw(output="mpl")
 plt.savefig("./circuit-diagram.png")
 
 qasm_simulator = Aer.get_backend('qasm_simulator')
-job = execute(qc, backend=qasm_simulator, shots=100024)
-plot_histogram(job.result().get_counts(), color='midnightblue', title="New Histogram")
+job = execute(qc, backend=qasm_simulator, shots=2048)
+plot_histogram(job.result().get_counts(), color='midnightblue', title="sudoku")
 plt.savefig("./results-histogram.png")
