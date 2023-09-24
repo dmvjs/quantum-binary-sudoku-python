@@ -48,7 +48,6 @@ output_qubit = QuantumRegister(1, name='out')
 cbits = ClassicalRegister(4, name='cbits')
 qc = QuantumCircuit(var_qubits, clause_qubits, output_qubit, cbits)
 
-
 qc.initialize([1, -1]/np.sqrt(2), output_qubit)
 qc.h(var_qubits)
 qc.barrier()
@@ -57,7 +56,9 @@ sudoku_oracle(qc, clause_list, var_qubits, clause_qubits, cbits)
 qc.barrier()
 qc.append(diffuser(4), [0,1,2,3])
 
-
+sudoku_oracle(qc, clause_list, var_qubits, clause_qubits, cbits)
+qc.barrier()
+qc.append(diffuser(4), [0,1,2,3])
 
 qc.measure(var_qubits, cbits)
 qc.draw(output="mpl")
